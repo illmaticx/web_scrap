@@ -113,8 +113,7 @@ for game in games:
 		try:
 			game_tags.append(steam_tags[i])
 		except KeyError:
-			print(f"Key:{i} not found")
-			print(game_title)
+			print(f"Game: {game_title}; Key: {i} not found")
 
 	game_data = {"Title":game_title, 
 	"OS_List":os_available, "Release_Year":game_release_year, 
@@ -123,8 +122,9 @@ for game in games:
 	"Review_Pop":review_pop,"Current_Price":price_curr,
 	"Original_Price":price_orig, "Discount":price_disc_per, "Game_Tags":game_tags}
 
+
 	game_datas.update(game_data)
-# sleep(uniform(0,1))
+# # sleep(uniform(0,1))
 
 	requests += 1
 	current_time = time()
@@ -133,8 +133,9 @@ for game in games:
 
 
 
-game_datas = pandas.DataFrame(game_datas).T
-print(game_datas.head(5))
+game_datas = pandas.DataFrame(game_datas)
+# print(game_datas.info())
+# print(game_datas.head(5))
 
 # game_datas = game_datas[["Title", "Release_Month", "Release_Day", "Release_Year", 
 # "Current_Price", "Original_Price", "Discount", 
