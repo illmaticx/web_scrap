@@ -4,8 +4,6 @@ import time
 import random
 import pandas
 
-request_count = 0
-
 class contExtractor():
 	'''
 	This class is used to extract containers from a url through the bs4 and requests packages

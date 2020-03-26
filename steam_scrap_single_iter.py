@@ -70,9 +70,6 @@ release_years.append(game_release_year)
 release_months.append(game_release_month)
 release_days.append(game_release_day)
 
-
-
-
 # Review Status/Percent/Number of Reviwers (Positive/Mixed/Etc.)
 review_status = ""
 review_percent = ""
@@ -108,7 +105,10 @@ review_pops.append(review_pop)
 price_curr = ""
 price_orig = ""
 price_disc_per = ""
+
+#price_list[1]
 price_curr_cont = game.find("div", class_ = "col search_price responsive_secondrow")
+#price_list[0]
 price_disc_per_cont = game.find("div", class_ = "col search_discount responsive_secondrow")
 
 # If there is no sale
@@ -154,3 +154,12 @@ game_datas = pd.DataFrame(game_data)
 game_datas = game_datas[["Title", "Current_Price", "Original_Price", "Discount", "Review_Status", 
 "Review_Percent", "Review_Pop", "Game_Tags", "Release_Day", "Release_Month", "Release_Year"]]
 print(game_datas.info())
+
+
+def main():
+	print("hello")
+
+
+
+if __name__ == '__main__':
+	main()
