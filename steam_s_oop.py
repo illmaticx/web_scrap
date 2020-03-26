@@ -220,16 +220,49 @@ def get_info_dict(obj: contExtractor) -> dict:
 def get_data() -> dict:
 	request_count = 0
 	data = {}
+	titles = []
+	os_list = []
+	months = []
+	days = []
+	years = []
+	price_curr_list = []
+	price_orig_list = []
+	price_disc_list = []
+	review_status_list = []
+	review_per_list = []
+	review_pop_list = []
+	tag_list = []
+
 	urls = ["https://store.steampowered.com/search/?sort_by=Released_DESC&os=win&filter=popularnew" + "&page=" + str(i) for i in range(1,11)]
 	for url in urls:
 		start = time.time()
 		o = contExtractor(url)
 		request_count += 1
-		data.update(get_info_dict(o))
+		
+		titles.append(get_title_list(o))
+		os_list.append(get_oss_list(o))
+		months.append(get_release_month_list(o))
+		days.append(get_release_day_list(o))
+		years.append(get_release_year_list(o))
+		price_curr_list.append(get_price_curr_list(o))
+		price_orig_list.append(get_price_orig_list(o))
+		price_disc_list.append(get_price_disc_list(o))
+		review_status_list.append(get_review_status_list(o))
+		review_per_list.append(get_review_per_list(o))
+		review_pop_list.append(get_review_pop_list(o))
+		tag_list.append(get_tag_info_list(o))
+		
+		
+
 		time.sleep(random.randint(3,5))
 		end = time.time()
 		elapsed = end - start
 		print(f"Request: {request_count}; Frequency: {1/elapsed} requests/s")
+
+
+
+
+
 		print(pandas.DataFrame(data).info())
 	return data
 
