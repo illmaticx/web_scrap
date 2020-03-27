@@ -113,9 +113,7 @@ def get_review_info(obj: contExtractor, num: int) -> list:
 		return [status, percent, pop]
 
 	
-                                                  									  
-
-
+              
 # Returns list of price info as [current_price, original_price, discount_percentage]
 def get_price_info(obj: contExtractor, num: int) -> list:
 	assert type(obj) == contExtractor
@@ -233,20 +231,12 @@ def get_info_dict(obj: contExtractor) -> dict:
 def get_data() -> dict:
 	request_count = 0
 	data = {}
-	titles = []
-	os_list = []
-	months = []
-	days = []
-	years = []
-	price_curr_list = []
-	price_orig_list = []
-	price_disc_list = []
-	review_status_list = []
-	review_per_list = []
-	review_pop_list = []
-	tag_list = []
+	datas = {}
 
 	urls = ["https://store.steampowered.com/search/?sort_by=Released_DESC&os=win&filter=popularnew" + "&page=" + str(i) for i in range(1,11)]
+
+	obj = contExtractor(urls[0])
+
 	for url in urls:
 		
 		start = time.time()
@@ -254,7 +244,8 @@ def get_data() -> dict:
 		request_count += 1
 		
 		for i in range(len(obj.game_conts)):
-			data.update({"Title":get_title(obj,i), 
+			
+			datas.update({"Title":get_title(obj,i), 
 			"Available_OS":get_oss(obj,i),
 			"Month":get_release_info(obj,i)[0], 
 			"Day":get_release_info(obj,i)[1],
@@ -267,14 +258,14 @@ def get_data() -> dict:
 			"Reviewer_Count":get_review_info(obj,i)[2],
 			"Game_Tags":get_tag_info(obj,i)})
 		
-		print(data)
+		print(len(datas))
 		time.sleep(random.randint(3,5))
 		end = time.time()
 		elapsed = end - start
 		print(f"Request: {request_count}; Frequency: {1/elapsed} requests/s")
 
 		# print(pandas.DataFrame(data).info())
-	return data
+	return datas
 
 # Initialization of contExtractor object
 e = contExtractor("https://store.steampowered.com/search/?sort_by=Released_DESC&os=win&filter=popularnew")
@@ -282,15 +273,11 @@ e = contExtractor("https://store.steampowered.com/search/?sort_by=Released_DESC&
 
 def main():
 
-	# data = get_data()
+	data = get_data()
 	# data = pandas.DataFrame(data)
 	# print("\n")
 	# print(data.info())
-	for i in range(len(e.game_conts)):
-		try:
-			get_tag_info(e,i)
-		except KeyError:
-			print(i, get_title(e,i))
+
 
 
 if __name__ == "__main__":
