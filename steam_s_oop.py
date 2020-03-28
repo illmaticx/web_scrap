@@ -4,7 +4,6 @@ import time
 import random
 import pandas
 import csv
-import matplotlib.pyplot as plt
 
 class contExtractor():
 	'''
