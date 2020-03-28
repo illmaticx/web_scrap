@@ -3,6 +3,8 @@ import requests
 import time
 import random
 import pandas
+import csv
+import matplotlib.pyplot as plt
 
 class contExtractor():
 	'''
@@ -164,74 +166,22 @@ def get_tag_info(obj: contExtractor, num: int) -> list:
 
 	return game_tags
 
-
-''' 
-	Now that all the functions for the single game have been made,
-	functions for the iteration over the search results and 
-	consequential collection of each parameter into lists will be 
-	made below
-'''
-
-def get_title_list(obj: contExtractor) -> list:
-	return [get_title(e,i) for i in range(len(obj.game_conts))]
-
-def get_oss_list(obj: contExtractor) -> list:
-	return [get_oss(e,i) for i in range(len(obj.game_conts))]	
-
-def get_release_month_list(obj: contExtractor) -> list:
-	return [get_release_info(e,i)[0] for i in range(len(obj.game_conts))]
-
-def get_release_day_list(obj: contExtractor) -> list:
-	return [get_release_info(e,i)[1] for i in range(len(obj.game_conts))]
-
-def get_release_year_list(obj: contExtractor) -> list:
-	return [get_release_info(e,i)[2] for i in range(len(obj.game_conts))]
-
-def get_review_status_list(obj: contExtractor) -> list:
-	return [get_review_info(e,i)[0] for i in range(len(obj.game_conts))]
-
-def get_review_per_list(obj: contExtractor) -> list:
-	return [get_review_info(e,i)[1] for i in range(len(obj.game_conts))]
-
-def get_review_pop_list(obj: contExtractor) -> list:
-	return [get_review_info(e,i)[2] for i in range(len(obj.game_conts))]
-
-def get_price_curr_list(obj: contExtractor) -> list:
-	return [get_price_info(e,i)[0] for i in range(len(obj.game_conts))]
-
-def get_price_orig_list(obj: contExtractor) -> list:
-	return [get_price_info(e,i)[1] for i in range(len(obj.game_conts))]	
-
-def get_price_disc_list(obj: contExtractor) -> list:
-	return [get_price_info(e,i)[2] for i in range(len(obj.game_conts))]		
-
-def get_tag_info_list(obj: contExtractor) -> list:
-	return [get_tag_info(e,i) for i in range(len(obj.game_conts))]
-
-def get_info_dict(obj: contExtractor) -> dict:
-	'''
-	Compiles all parameters of games in the whole page into a dictionary
-	'''
-	info_dict = {"Title":get_title_list(obj), 
-	"Available_OS":get_oss_list(obj),
-	"Month":get_release_month_list(obj), 
-	"Day":get_release_day_list(obj),
-	"Year":get_release_year_list(obj), 
-	"Current_Price":get_price_curr_list(obj),
-	"Original_Price":get_price_orig_list(obj),
-	"Discount_Percentage":get_price_disc_list(obj),
-	"Review_Status":get_review_status_list(obj),
-	"Percentage_Positive_Reviews":get_review_per_list(obj),
-	"Reviewer_Count":get_review_pop_list(obj),
-	"Game_Tags":get_tag_info_list(obj)  
-	}
-
-	return info_dict
-
 def get_data() -> dict:
 	request_count = 0
 	data = {}
 	datas = {}
+	title_list = []
+	os_list = []
+	month_list = []
+	day_list = []
+	year_list = []
+	price_curr_list = []
+	price_orig_list = []
+	price_disc_list = []
+	review_status_list = []
+	review_per_list = []
+	review_pop_list = []
+	tag_list = []
 
 	urls = ["https://store.steampowered.com/search/?sort_by=Released_DESC&os=win&filter=popularnew" + "&page=" + str(i) for i in range(1,11)]
 
@@ -244,39 +194,57 @@ def get_data() -> dict:
 		request_count += 1
 		
 		for i in range(len(obj.game_conts)):
+			title_list.append(get_title(obj,i))
+			os_list.append(get_oss(obj,i))
+			month_list.append(get_release_info(obj,i)[0])
+			day_list.append(get_release_info(obj,i)[1])
+			year_list.append(get_release_info(obj,i)[2])
+			price_curr_list.append(get_price_info(obj,i)[0])
+			price_orig_list.append(get_price_info(obj,i)[1])
+			price_disc_list.append(get_price_info(obj,i)[2])
+			review_status_list.append(get_review_info(obj,i)[0])
+			review_per_list.append(get_review_info(obj,i)[1])
+			review_pop_list.append(get_review_info(obj,i)[2])
+			tag_list.append(get_tag_info(obj,i))
 			
-			datas.update({"Title":get_title(obj,i), 
-			"Available_OS":get_oss(obj,i),
-			"Month":get_release_info(obj,i)[0], 
-			"Day":get_release_info(obj,i)[1],
-			"Year":get_release_info(obj,i)[2], 
-			"Current_Price":get_price_info(obj,i)[0],
-			"Original_Price":get_price_info(obj,i)[1],
-			"Discount_Percentage":get_price_info(obj,i)[2],
-			"Review_Status":get_review_info(obj,i)[0],
-			"Percentage_Positive_Reviews":get_review_info(obj,i)[1],
-			"Reviewer_Count":get_review_info(obj,i)[2],
-			"Game_Tags":get_tag_info(obj,i)})
-		
-		print(len(datas))
-		time.sleep(random.randint(3,5))
+
+		# time.sleep(random.randint(3,5))
 		end = time.time()
 		elapsed = end - start
 		print(f"Request: {request_count}; Frequency: {1/elapsed} requests/s")
 
-		# print(pandas.DataFrame(data).info())
-	return datas
+
+	data = [{"Title":title_list, 
+	"Available_OS":os_list,
+	"Month":month_list, 
+	"Day":day_list,
+	"Year":year_list, 
+	"Current_Price":price_curr_list,
+	"Original_Price":price_orig_list,
+	"Discount_Percentage":price_disc_list,
+	"Review_Status":review_status_list,
+	"Percentage_Positive_Reviews":review_per_list,
+	"Reviewer_Count":review_pop_list,
+	"Game_Tags":tag_list}]
+
+	return data
 
 # Initialization of contExtractor object
 e = contExtractor("https://store.steampowered.com/search/?sort_by=Released_DESC&os=win&filter=popularnew")
 
+def info(data) -> None:
+	csv_file = "steam_new_releases_data.csv"
+
+	pass
+
+
+
+
 
 def main():
 
-	data = get_data()
-	# data = pandas.DataFrame(data)
-	# print("\n")
-	# print(data.info())
+	info(get_data())
+	
 
 
 
