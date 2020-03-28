@@ -31,9 +31,9 @@ class contExtractor():
 	def GetPriceCont(self, game_num: int):
 		return self.game_conts[game_num].find("div", class_ = "col search_price_discount_combined responsive_secondrow")
 
-
-# Gets title of game
+# Returns title of game
 def get_title(obj: contExtractor, num: int) -> str:
+	
 	return obj.GetMainCont(num).span.string
 
 # Returns tuple of booleans corresponding to eligible os's (win,mac,linux)
@@ -74,7 +74,6 @@ def get_release_info(obj: contExtractor, num: int) -> list:
 
 	return [month, day, year]
 
-
 # Returns list of review info as [review_status, % positive reviews, # of reviewers]
 def get_review_info(obj: contExtractor, num: int) -> list:
 
@@ -111,9 +110,7 @@ def get_review_info(obj: contExtractor, num: int) -> list:
 		pop = ""
 
 		return [status, percent, pop]
-
-	
-              
+           
 # Returns list of price info as [current_price, original_price, discount_percentage]
 def get_price_info(obj: contExtractor, num: int) -> list:
 
@@ -170,7 +167,6 @@ def get_tag_info(obj: contExtractor, num: int) -> list:
 	return game_tags
 
 # Returns a dictionary that comprises of the 12 parameters as keys and the values from each game for each parameter as the corresponding values
-
 def get_data() -> dict:
 
 	request_count = 0
@@ -236,7 +232,8 @@ def get_data() -> dict:
 
 	return data
 
-def info(data) -> None:
+# Writes the data obtained from the get_data() function into a csv file
+def info(data: dict) -> None:
 
 	csv_file = "steam_new_releases_data.csv"
 
@@ -253,10 +250,6 @@ def info(data) -> None:
 				data["Discount_Percentage"][i],data["Review_Status"][i],
 				data["Percentage_Positive_Reviews"][i],
 				data["Reviewer_Count"][i], data["Game_Tags"][i]])
-
-
-
-
 
 def main():
 
