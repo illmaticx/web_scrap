@@ -1,0 +1,14 @@
+To add a file to the staging area:
+git add <file>
+
+To add all files 
+git add .
+
+To add all of  a particular file type (i.e. .py):
+git add.py
+
+To view status of files (changes to be committed/untracked files):
+git status
+
+To commit files
+git commit -m "comment"
